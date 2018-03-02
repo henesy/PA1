@@ -1,26 +1,31 @@
+/**
+ * @author Sean Hinchee seh@iastate.edu
+ * @author Tyler Fenton tjfenton@iastate.edu
+ */
 
 public class Tuple {
-	Integer key;
-	String value;
+	// Could be made private, but they aren't.
+	public Integer key;
+	public String value;
 	
 	// Basic constructor
-	Tuple(int keyP, String valueP){
+	public Tuple(int keyP, String valueP) {
 		key = keyP;
 		value = valueP;
 	}
 	
 	// Returns key
-	Integer getKey(){
+	public Integer getKey() {
 		return key;
 	}
 	
 	// Returns value
-	String getValue(){
+	public String getValue() {
 		return value;
 	}
 	
 	// Basic comparator
-	Boolean equals(Tuple t){
+	public Boolean equals(Tuple t) {
 		return this.key.equals(t.key) && this.value.equals(t.value);
 	}
 	
