@@ -4,5 +4,29 @@
  */
 
 public class HashStringSimilarity {
-
+	
+	// Basic constructor
+	public HashStringSimilarity() {
+		// TODO -- page 5/8
+		
+	}
+	
+	// Returns VectorLength of S
+	public float lengthOfS1() {
+		//TODO -- page 6/8
+		
+	}
+	
+	// Returns VectorLength of T
+	public float lengthOfS2() {
+		//TODO -- page 6/8
+		
+	}
+	
+	// Returns Similarity(S, T);
+	public float similarity() {
+		//TODO -- page 6/8
+		
+	}
+	
 }
