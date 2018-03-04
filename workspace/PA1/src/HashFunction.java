@@ -1,4 +1,4 @@
-/**
+package workspace.PA1.src; /**
  * @author Sean Hinchee seh@iastate.edu
  * @author Tyler Fenton tjfenton@iastate.edu
  */

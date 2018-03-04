@@ -1,3 +1,5 @@
+package workspace.PA1.src;
+
 /**
  * @author Sean Hinchee seh@iastate.edu
  * @author Tyler Fenton tjfenton@iastate.edu
@@ -15,19 +17,19 @@ public class BruteForceSimilarity {
 	// Returns the VectorLength of S
 	public float lengthOfS1() {
 		//TODO -- page 5/8
-		
+		return 0;
 	}
 	
 	// Returns the VectorLength of T
 	public float lengthOfS2() {
 		//TODO -- page 5/8
-		
+		return 0;
 	}
 	
 	// Returns Similarity(S, T);
 	public float similarity() {
 		//TODO -- page 5/8
-		
+		return 0;
 	}
 
 }
