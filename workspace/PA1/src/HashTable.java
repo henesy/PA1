@@ -17,7 +17,7 @@ public class HashTable {
 			
 		}
 
-		public static void main(String args[]) {
+		public static void main(String[] args) {
 			int prime = getNextPrime(6);
 			System.out.println(prime);
 		}
@@ -87,18 +87,18 @@ public class HashTable {
 		public static int getNextPrime(int given_limit) {
 			int limit = 0;
 			// Bertrand's Postulate states that when given_limit > 3 next prime exists within
-			// given_limit < p < (given_limit * 2) - 2
+			// given_limit < p < (given_limit * 2) - 2 (which is == limit).
 			if (given_limit > 3) {
 				limit = (given_limit * 2) - 2;
 			} else if (given_limit == 2 || given_limit == 3) {
 				return (int) Math.ceil(given_limit / 2) + given_limit;
 			}
-			for (int i = given_limit; i < limit; i++) {
+			for (int i = given_limit; i <= limit; i++) {
 				if (isPrime(i)) {
 					return i;
 				}
 			}
-			return 0;
+			return 3;
 		}
 
 }
