@@ -16,11 +16,6 @@ public class HashTable {
 			//TODO -- page 2/8
 			
 		}
-
-		public static void main(String[] args) {
-			int prime = getNextPrime(6);
-			System.out.println(prime);
-		}
 		
 		// Returns maximum load of the hash table
 		public int maxLoad() {

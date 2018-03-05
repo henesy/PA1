@@ -9,8 +9,8 @@ package workspace.PA1.src; /**
 public class HashTest {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		
+			int prime = HashTable.getNextPrime(6);
+			System.out.println(prime);
 	}
 
 }
