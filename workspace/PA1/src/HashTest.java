@@ -1,7 +1,3 @@
-package workspace.PA1.src; /**
- * @author Sean Hinchee seh@iastate.edu
- * @author Tyler Fenton tjfenton@iastate.edu
- */
 
 /** 
  * Class to test functionality of miscellaneous hash functions

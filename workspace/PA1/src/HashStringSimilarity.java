@@ -1,4 +1,3 @@
-package workspace.PA1.src;
 
 /**
  * @author Sean Hinchee seh@iastate.edu
@@ -13,6 +12,10 @@ public class HashStringSimilarity {
 		
 	}
 	
+	public HashStringSimilarity(String similarityString1, String similarityString2, int similarityShingleLength) {
+		// TODO Auto-generated constructor stub
+	}
+
 	// Returns VectorLength of S
 	public float lengthOfS1() {
 		//TODO -- page 6/8
@@ -29,6 +32,11 @@ public class HashStringSimilarity {
 	public float similarity() {
 		//TODO -- page 6/8
 		return 0;
+	}
+
+	public void vectorCounts(String string) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

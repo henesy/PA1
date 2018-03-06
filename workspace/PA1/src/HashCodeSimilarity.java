@@ -1,4 +1,3 @@
-package workspace.PA1.src;
 
 /**
  * @author Sean Hinchee seh@iastate.edu
