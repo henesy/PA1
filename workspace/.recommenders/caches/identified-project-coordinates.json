@@ -1,1 +1,1 @@
-[[{"location":"/usr/lib/jvm/java-8-openjdk-amd64","type":"JRE","hints":{"EXECUTION_ENVIRONMENT":"JavaSE-1.8"}},"jre:jre:1.8.0"],[{"location":"/home/henesy/myfiles/cs311/PA1/workspace/PA1","type":"PROJECT","hints":{"PROJECT_NAME":"PA1"}},"ABSENT"]]
+[[{"location":"/home/henesy/myfiles/cs311/PA1/workspace/PA1","type":"PROJECT","hints":{"PROJECT_NAME":"PA1"}},"ABSENT"],[{"location":"/usr/lib/jvm/java-8-openjdk-amd64","type":"JRE","hints":{"EXECUTION_ENVIRONMENT":"JavaSE-1.8"}},"jre:jre:1.8.0"]]
