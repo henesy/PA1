@@ -9,7 +9,7 @@ public class TestHashTable
     public static final String testString2 = "is a flexbox toungue twister";
     public static final String testString3 = "fitnessgram pacer test";
 
-    public static HashTable allSameHashTable()
+    public static HashTable allSameKeyHashTable()
     {
         HashTable ht = new HashTable(1024);
         ht.add(new Tuple(23, testString1));
@@ -17,7 +17,15 @@ public class TestHashTable
         return ht;
     }
 
-    public static HashTable allUniqueHashTable()
+    public static HashTable allDuplicatesHashTable()
+    {
+        HashTable ht = new HashTable(1024);
+        ht.add(new Tuple(23, testString1));
+        ht.add(new Tuple(23, testString1));
+        return ht;
+    }
+
+    public static HashTable allUniqueKeyHashTable()
     {
         HashTable ht = new HashTable(1024);
         ht.add(new Tuple(23, testString1));
@@ -25,7 +33,7 @@ public class TestHashTable
         return ht;
     }
 
-    public static HashTable mixedHashTable()
+    public static HashTable mixedKeyHashTable()
     {
         HashTable ht = new HashTable(1024);
         ht.add(new Tuple(23, testString1));
@@ -64,31 +72,44 @@ public class TestHashTable
     @Test
     public void allSameNumLoaded()
     {
-        assert (allSameHashTable().maxLoad() == 2);
+        assert (allSameKeyHashTable().maxLoad() == 2);
     }
 
     @Test
     public void allUniqueNumLoaded()
     {
-        assert (allUniqueHashTable().maxLoad() == 1);
+        assert (allUniqueKeyHashTable().maxLoad() == 1);
+    }
+
+    @Test
+    public void allDuplicatedNumLoaded()
+    {
+    	System.out.println(allDuplicatesHashTable().maxLoad());
+        assert (allDuplicatesHashTable().maxLoad() == 1);
+    }
+
+    @Test
+    public void allDuplicatedAverageLoad()
+    {
+        assert (allDuplicatesHashTable().averageLoad() == 1);
     }
 
     @Test
     public void mixedNumLoaded()
     {
-        assert (mixedHashTable().maxLoad() == 2);
+        assert (mixedKeyHashTable().maxLoad() == 2);
     }
 
     @Test
     public void allSameAverageLoad()
     {
-        assert (allSameHashTable().averageLoad() == 2);
+        assert (allSameKeyHashTable().averageLoad() == 2);
     }
 
     @Test
     public void allSameAverageLoadRemove()
     {
-        HashTable ht = allSameHashTable();
+        HashTable ht = allSameKeyHashTable();
         ht.remove(new Tuple(23, testString1));
         assert (ht.averageLoad() == 1.0);
     }
@@ -96,13 +117,21 @@ public class TestHashTable
     @Test
     public void allUniqueAverageLoad()
     {
-        assert (allUniqueHashTable().averageLoad() == 1);
+        assert (allUniqueKeyHashTable().averageLoad() == 1);
     }
 
     @Test
     public void allUniqueAverageLoadRemove()
     {
-        HashTable ht = allUniqueHashTable();
+        HashTable ht = allUniqueKeyHashTable();
+        ht.remove(new Tuple(23, testString1));
+        assert (ht.averageLoad() == 1);
+    }
+
+    @Test
+    public void allDuplicatesAverageLoadRemove()
+    {
+        HashTable ht = allDuplicatesHashTable();
         ht.remove(new Tuple(23, testString1));
         assert (ht.averageLoad() == 1);
     }
@@ -110,22 +139,21 @@ public class TestHashTable
     @Test
     public void mixedAverageLoad()
     {
-        assert (mixedHashTable().averageLoad() == 1.5);
+        assert (mixedKeyHashTable().averageLoad() == 1.5);
     }
 
     @Test
     public void mixedAverageLoadRemove()
     {
-        HashTable ht = mixedHashTable();
+        HashTable ht = mixedKeyHashTable();
         ht.remove(new Tuple(23, testString1));
         assert (ht.averageLoad() == 1);
-
     }
 
     @Test
     public void mixedAverageLoadRemove2()
     {
-        HashTable ht = mixedHashTable();
+        HashTable ht = mixedKeyHashTable();
         ht.remove(new Tuple(25, testString3));
         assert (ht.averageLoad() == 2);
     }
@@ -133,19 +161,19 @@ public class TestHashTable
     @Test
     public void allSameLoadFactor()
     {
-        assert (allSameHashTable().loadFactor() == (float) 2 / 1031);
+        assert (allSameKeyHashTable().loadFactor() == (float) 2 / 1031);
     }
 
     @Test
     public void allUniqueLoadFactor()
     {
-        assert (allUniqueHashTable().loadFactor() == (float) 2 / 1031);
+        assert (allUniqueKeyHashTable().loadFactor() == (float) 2 / 1031);
     }
 
     @Test
     public void mixedLoadFactor()
     {
-        assert (mixedHashTable().loadFactor() == (float) 3 / 1031);
+        assert (mixedKeyHashTable().loadFactor() == (float) 3 / 1031);
     }
 
     @Test

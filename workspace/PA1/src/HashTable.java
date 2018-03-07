@@ -37,8 +37,7 @@ public class HashTable {
 		public float averageLoad() {
 			if(lsize == 0)
 				return 0;
-			// Cast to float?
-			return size / lsize;
+			return (float) size / lsize;
 		}
 
 		// Returns the current size of the hash table
@@ -53,8 +52,7 @@ public class HashTable {
 		
 		// Returns the load factor which is: numElements()/size()
 		public float loadFactor() {
-			// Cast to float?
-			return size / set.length;
+			return (float) size / set.length;
 		}
 		
 		// Adds t to the hash table (see page 2/8)
@@ -74,20 +72,33 @@ public class HashTable {
 		
 		// Returns an array list of Tuples whose key == k
 		public ArrayList<Tuple> search(int k) {
-			//TODO -- page 3/8
-			return null;
+			MultiSet s = set[hash.hash(k)];
+			if(s == null)
+				return new ArrayList<Tuple>();
+			return s.getElements();
+		}
+		
+		
+		public MultiSet searchElems(int k) {
+			return set[hash.hash(k)];
 		}
 		
 		// Returns the number of times t is in the hash table
 		public int search(Tuple t) {
-			//TODO -- page 3/8
-			return 0;
+			return search(t.key).size();
 		}
 		
 		// Removes one occurrence t from the hash table
 		public void remove(Tuple t) {
-			//TODO -- page 3/8
-			
+			MultiSet ms = set[hash.hash(t.key)];
+			if(ms == null)
+				return;
+			ms.getElements().remove(t);
+			if(!ms.getElements().contains(t)) {
+				size--;
+				if(ms.getLoad().decrement().getVal() == 0)
+					lsize--;
+			}
 		}
 
 		public static boolean isPrime(int n) {
@@ -98,18 +109,20 @@ public class HashTable {
 		}
 		
 		// Index Loads
-		private HashTable indexLoad(MultiSet e, boolean duplicated) {
+		private void indexLoad(MultiSet e, boolean duplicated) {
 			// TODO -- REFACTOR
-	        return removeLoad(e.getLoad())
-	                .addLoad(e.getLoad(), duplicated)
-	                .incrementLoad(e.getLoad(), duplicated);
+	       removeLoad(e.getLoad());
+	       addLoad(e.getLoad(), duplicated);
+	       incrementLoad(e.getLoad(), duplicated);
 	    }
 		
 		private HashTable addLoad(Load l, boolean duplicated) {
-			// TODO Auto-generated method stub
-			if(l.getVal() == 0)
-					lsize++;
-	        loads.add(l);
+			// This might be wrong
+			//if(!duplicated) {
+				if(l.getVal() == 0)
+						lsize++;
+		        loads.add(l);
+			//}
 	        return this;
 		}
 
@@ -124,17 +137,16 @@ public class HashTable {
 	        return this;
 	    }
 		
-		private void resize()
-	    {
+		private void resize() {
 	        LinkedList<Tuple> toAdd = new LinkedList<Tuple>();
-	        for (MultiSet e : set)
+	        for(MultiSet e : set)
 	            if (e != null)
 	                for (Tuple t : e.getElements())
 	                    toAdd.add(t);
 	        set = new MultiSet[getNextPrime(size() * 2)];
 	        size = 0;
 	        lsize = 0;
-	        for (Tuple t : toAdd)
+	        for(Tuple t : toAdd)
 	            add(t);
 	    }
 		
@@ -142,6 +154,10 @@ public class HashTable {
 			return this.loadFactor() >= 0.7;
 		}
 
+		private MultiSet[] getElements() {
+			return set;
+		}
+		
 		// Generates the next largest prime given a limit
 		public static int getNextPrime(int given_limit) {
 			int limit = 0;

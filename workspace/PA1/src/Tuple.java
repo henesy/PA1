@@ -26,7 +26,8 @@ public class Tuple {
 	}
 	
 	// Basic comparator
-	public Boolean equals(Tuple t) {
+	public boolean equals(Object o) {
+		Tuple t = (Tuple) o;
 		return this.key.equals(t.key) && this.value.equals(t.value);
 	}
 	

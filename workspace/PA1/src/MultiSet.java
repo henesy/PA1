@@ -11,25 +11,39 @@ public class MultiSet {
 	private ArrayList<Tuple> list;
     private Load load;
 
-    /*
-	public PriorityQueue<Load> getElements() {
-		// TODO Auto-generated method stub
-		return null;
-	}*/
-
-	public Load getLoad() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	public ArrayList<Tuple> getElements()
-    {
-        return list;
+    public MultiSet() {
+    	list = new ArrayList<Tuple>();
+    	load = new Load(this);
     }
 
+	public Load getLoad() {
+		return load;
+	}
+	
+	public ArrayList<Tuple> getElements() {
+        return list;
+    }
+	
+	public void setElements(ArrayList<Tuple> elems) {
+		this.list = elems;
+	}
+
 	public MultiSet add(Tuple t) {
-		// TODO Auto-generated method stub
-		return null;
+		list.add(t);
+		return this;
+	}
+	
+	public MultiSet incrementLoad() {
+		load.setVal(load.getVal() + 1);
+		return this;
+	}
+	
+	public MultiSet indexLoad() {
+		return this;
+	}
+	
+	public void setLoad(Load load) {
+		this.load = load;
 	}
 	
 }
