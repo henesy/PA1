@@ -94,12 +94,6 @@ public class HashTable {
 				return new ArrayList<Tuple>();
 			return s.getElements();
 		}
-		
-		/* SLATED FOR REMOVAL
-		public MultiSet searchElems(int k) {
-			return sets[hashfunc.hash(k)];
-		}
-		*/
 
 		// Required -- Returns the number of times t is in the hash table
 		public int search(Tuple t) {
@@ -140,12 +134,6 @@ public class HashTable {
 	        for(Tuple t : toAdd)
 	            add(t);
 	    }
-		
-		/* SLATED FOR REMOVAL
-		private MultiSet[] getElements() {
-			return sets;
-		}
-		*/
 		
 		// Generates the next largest prime given a limit
 		private static int getNextPrime(int given_limit) {
