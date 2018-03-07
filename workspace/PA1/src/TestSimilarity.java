@@ -4,8 +4,8 @@ public class TestSimilarity
 {
     public static String vectorString1 = "ABFHBFDFAB";
     public static String vectorString2 = "BEAAHHDCH";
-    public static String similarityString1 = "A rose is a rose is a rose.";
-    public static String similarityString2 = "A rose is a flower, which is a rose.";
+    public static String similarityString1 = "aroseisaroseisarose";
+    public static String similarityString2 = "aroseisaflowerwhichisarose";
 
     public static int vectorShingleLength = 1;
     public static int similarityShingleLength = 4;
@@ -13,19 +13,6 @@ public class TestSimilarity
     public static float vectorAnswer1 = (float) Math.sqrt(24);
     public static float vectorAnswer2 = (float) Math.sqrt(17);
     public static float similarityAnswer = (float) (22 / (Math.sqrt(38) * Math.sqrt(27)));
-
-    /**
-     * Returns true if the distance between a and b is within a tolerance.
-     * 
-     * @param a
-     * @param b
-     * @param tolerance
-     * @return
-     */
-    public static boolean fuzzyEquals(float a, float b, float tolerance)
-    {
-        return Math.abs(a - b) < tolerance;
-    }
 
     @Test
     public void bruteForceVectorLength()
@@ -49,7 +36,6 @@ public class TestSimilarity
     {
         HashStringSimilarity bfs = new HashStringSimilarity(
                 vectorString1, vectorString2, vectorShingleLength);
-        bfs.vectorCounts("ve ewr wr");
         assert (bfs.lengthOfS1() == vectorAnswer1);
         assert (bfs.lengthOfS2() == vectorAnswer2);
     }
@@ -76,6 +62,6 @@ public class TestSimilarity
     {
         HashCodeSimilarity bfs = new HashCodeSimilarity(
                 similarityString1, similarityString2, similarityShingleLength);
-        assert (fuzzyEquals(bfs.similarity(), similarityAnswer, 0.02f));
+        assert (Util.fuzzyMatch(bfs.similarity(), similarityAnswer, 0.1f));
     }
 }

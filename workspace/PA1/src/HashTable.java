@@ -57,7 +57,7 @@ public class HashTable {
 		
 		// Required -- Adds t to the hash table (see page 2/8)
 		public HashTable add(Tuple t) {
-			int h = hashfunc.hash(t.key);
+			int h = hashfunc.hash(t.getKey());
 			MultiSet ms = sets[h];
 			if(ms == null)
 				sets[h] = new MultiSet();
@@ -97,12 +97,12 @@ public class HashTable {
 
 		// Required -- Returns the number of times t is in the hash table
 		public int search(Tuple t) {
-			return search(t.key).size();
+			return search(t.getKey()).size();
 		}
 		
 		// Required -- Removes one occurrence t from the hash table
 		public void remove(Tuple t) {
-			MultiSet ms = sets[hashfunc.hash(t.key)];
+			MultiSet ms = sets[hashfunc.hash(t.getKey())];
 			if(ms == null)
 				return;
 			ms.getElements().remove(t);
@@ -117,8 +117,8 @@ public class HashTable {
 		private void resize() {
 	        LinkedList<Tuple> toAdd = new LinkedList<Tuple>();
 	        for(MultiSet e : sets)
-	            if (e != null)
-	                for (Tuple t : e.getElements())
+	            if(e != null)
+	                for(Tuple t : e.getElements())
 	                    toAdd.add(t);
 	        sets = new MultiSet[Util.getNextPrime(size() * 2)];
 	        size = 0;

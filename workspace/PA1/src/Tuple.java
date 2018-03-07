@@ -6,8 +6,8 @@
 
 public class Tuple {
 	// Could be made private, but they aren't.
-	public Integer key;
-	public String value;
+	private Integer key;
+	private String value;
 	
 	// Basic constructor
 	public Tuple(int keyP, String valueP) {
@@ -23,6 +23,16 @@ public class Tuple {
 	// Returns value
 	public String getValue() {
 		return value;
+	}
+	
+	// Sets key
+	public void setKey(int k) {
+		key = k;
+	}
+	
+	// Sets value
+	public void setValue(String v) {
+		value = v;
 	}
 	
 	// Basic comparator
