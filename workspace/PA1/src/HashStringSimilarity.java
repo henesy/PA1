@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 
 /**
  * @author Sean Hinchee seh@iastate.edu
@@ -5,15 +6,20 @@
  */
 
 public class HashStringSimilarity {
+	HashTable s; //multiset of all shingles in s1
+	HashTable t; //multiset of all shingles in s2
+	
+	ArrayList<Tuple> s_list; //multiset of all shingles in s1
+	ArrayList<Tuple> t_list; //multiset of all shingles in s2
 	
 	// Basic constructor
-	public HashStringSimilarity() {
-		// TODO -- page 5/8
-		
-	}
-	
-	public HashStringSimilarity(String similarityString1, String similarityString2, int similarityShingleLength) {
-		// TODO Auto-generated constructor stub
+	public HashStringSimilarity(String s1, String s2, int sLength) {
+		int i;
+		String temp;
+		for (i = 0; i < s1.length() - sLength; i++) {
+			temp = s1.substring(i, i + sLength);
+			
+		}
 	}
 
 	// Returns VectorLength of S
