@@ -28,9 +28,8 @@ public class MultiSet {
 		this.list = elems;
 	}
 
-	public MultiSet add(Tuple t) {
+	public void add(Tuple t) {
 		list.add(t);
-		return this;
 	}
 	
 	public MultiSet incrementLoad() {

@@ -11,18 +11,18 @@ import java.util.PriorityQueue;
 
 public class HashTable {
 		// Table state
-		private MultiSet[] set;
+		private MultiSet[] sets;
 		private PriorityQueue<Load> loads;
 		private int size;
 		private int lsize;
-		HashFunction hash;
+		HashFunction hashfunc;
 		
 	
 		// Initialize hash table
 		public HashTable(int size) {
 			int prime = getNextPrime(size);
-			set = new MultiSet[prime];
-			hash = new HashFunction(prime);
+			sets = new MultiSet[prime];
+			hashfunc = new HashFunction(prime);
 			loads = new PriorityQueue<Load>(Collections.reverseOrder());
 		}
 		
@@ -42,7 +42,7 @@ public class HashTable {
 
 		// Returns the current size of the hash table
 		public int size() {
-			return set.length;
+			return sets.length;
 		}
 		
 		// Returns the number of distinct Tuples in the hash table
@@ -52,27 +52,46 @@ public class HashTable {
 		
 		// Returns the load factor which is: numElements()/size()
 		public float loadFactor() {
-			return (float) size / set.length;
+			return (float) size / sets.length;
 		}
 		
 		// Adds t to the hash table (see page 2/8)
 		public HashTable add(Tuple t) {
-			int h = hash.hash(t.key);
-			MultiSet ms = set[h];
+			int h = hashfunc.hash(t.key);
+			MultiSet ms = sets[h];
 			if(ms == null)
-				set[h] = new MultiSet();
-			boolean dup = set[h].getElements().contains(t);
+				sets[h] = new MultiSet();
+			boolean dup = sets[h].getElements().contains(t);
 			if(!dup)
 				size++;
-			indexLoad(set[h].add(t), dup);
-			if(this.needResize())
+			
+			// Remove → Add → Increment load deterministically 
+			// TODO -- Refactor this
+			sets[h].add(t);
+			Load l = sets[h].getLoad();
+			
+			// Remove from queue
+			loads.remove(l);
+			
+			// Add to queue
+			if(l.getVal() == 0)
+				lsize++;
+			loads.add(l);
+			
+			// Increment load if needed
+			if(!dup)
+	        	l.increment();
+			
+			// Resize table if needed
+			if(loadFactor() >= 0.7)
 				resize();
 			return this;
 		}
 		
 		// Returns an array list of Tuples whose key == k
+		/// This could probably be made to return int or removed
 		public ArrayList<Tuple> search(int k) {
-			MultiSet s = set[hash.hash(k)];
+			MultiSet s = sets[hashfunc.hash(k)];
 			if(s == null)
 				return new ArrayList<Tuple>();
 			return s.getElements();
@@ -80,7 +99,7 @@ public class HashTable {
 		
 		
 		public MultiSet searchElems(int k) {
-			return set[hash.hash(k)];
+			return sets[hashfunc.hash(k)];
 		}
 		
 		// Returns the number of times t is in the hash table
@@ -90,7 +109,7 @@ public class HashTable {
 		
 		// Removes one occurrence t from the hash table
 		public void remove(Tuple t) {
-			MultiSet ms = set[hash.hash(t.key)];
+			MultiSet ms = sets[hashfunc.hash(t.key)];
 			if(ms == null)
 				return;
 			ms.getElements().remove(t);
@@ -106,56 +125,23 @@ public class HashTable {
 				if (n%i==0)
 					return false;
 			return true;
-		}
-		
-		// Index Loads
-		private void indexLoad(MultiSet e, boolean duplicated) {
-			// TODO -- REFACTOR
-	       removeLoad(e.getLoad());
-	       addLoad(e.getLoad(), duplicated);
-	       incrementLoad(e.getLoad(), duplicated);
-	    }
-		
-		private HashTable addLoad(Load l, boolean duplicated) {
-			// This might be wrong
-			//if(!duplicated) {
-				if(l.getVal() == 0)
-						lsize++;
-		        loads.add(l);
-			//}
-	        return this;
-		}
-
-		public HashTable removeLoad(Load l) {
-	        loads.remove(l);
-	        return this;
-	    }
-		
-		public HashTable incrementLoad(Load l, boolean duplicated) {
-	        if(!duplicated)
-	        	l.increment();
-	        return this;
-	    }
+		}	
 		
 		private void resize() {
 	        LinkedList<Tuple> toAdd = new LinkedList<Tuple>();
-	        for(MultiSet e : set)
+	        for(MultiSet e : sets)
 	            if (e != null)
 	                for (Tuple t : e.getElements())
 	                    toAdd.add(t);
-	        set = new MultiSet[getNextPrime(size() * 2)];
+	        sets = new MultiSet[getNextPrime(size() * 2)];
 	        size = 0;
 	        lsize = 0;
 	        for(Tuple t : toAdd)
 	            add(t);
 	    }
 		
-		private boolean needResize() {
-			return this.loadFactor() >= 0.7;
-		}
-
 		private MultiSet[] getElements() {
-			return set;
+			return sets;
 		}
 		
 		// Generates the next largest prime given a limit
