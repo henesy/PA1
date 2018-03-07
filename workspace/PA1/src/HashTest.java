@@ -5,8 +5,9 @@
 public class HashTest {
 
 	public static void main(String[] args) {
-			int prime = HashTable.getNextPrime(6);
-			System.out.println(prime);
+			// We know this works
+			//int prime = HashTable.getNextPrime(6);
+			//System.out.println(prime);
 	}
 
 }
