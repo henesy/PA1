@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
  * @author Sean Hinchee seh@iastate.edu
@@ -13,35 +12,48 @@ public class Util {
 		// Stripping is necessary for college if not for the spec
 		HashTable ht = new HashTable(s.length());
 		ArrayList<String> shingles = strToShingles(s, width);
-		Iterator<Integer> vals = rollover(strip(s), width).iterator();
+		ArrayList<Integer> vals = rollover(strip(s), width);
 		
-		for(String shingle : shingles)
-			ht.add(new Tuple(vals.next(), shingle));
+		// We put the values and shingles into the HashTable
+		int i = 0;
+		for(String shingle : shingles) {
+			ht.add(new Tuple(vals.get(i), shingle));
+			i++;
+		}
 		
 		return ht;
 	}
 	
 	// Rollover string into shingles ;; maybe merge into strToHashTable
 	private static ArrayList<Integer> rollover(String s, int width) {
-		int alpha = 31;
-		int numShingles = s.length() - width + 1;
-        String firstShingle = s.substring(0, width);
-        ArrayList<Integer> shingleValues = new ArrayList<Integer>(numShingles);
-        ArrayList<Integer> bases = strToBases(firstShingle);
-        int largestBaseValue = bases.get(bases.size() - 1);
-        shingleValues.add(Util.mkFirstVal(firstShingle, bases));
-        for (int i = 0; i < numShingles - 1; i++)
-        {
-            char currentChar = s.charAt(i + width);
-            int lastMostSignifigantChar = s.charAt(i) - 96;
-            int lastMostSignifigantCharValue = lastMostSignifigantChar * largestBaseValue;
-            int lastRepShifted = (shingleValues.get(i) - lastMostSignifigantCharValue) * alpha;
-            shingleValues.add(lastRepShifted + currentChar - 96);
-        }
-        return shingleValues;
+		int len = s.length();
+		int α = 31;
+		int diff = 96;
+		int MAXSHINGLES = len - width + 1; // maximum number of shingles
+		
+		// First shingle must be calculated for performance 
+		String shingle0 = s.substring(0, width);
+		ArrayList<Integer> b = strToBases(shingle0);
+		int MAXBASE = b.get(b.size() - 1);
+		
+		// Push the first value
+		ArrayList<Integer> vals = new ArrayList<Integer>(MAXSHINGLES);
+		vals.add(Util.mkFirstVal(shingle0, b));
+
+		// Roll over dead
+		int i;
+		for (i = 0; i < MAXSHINGLES - 1; i++) {
+			char c = s.charAt(i + width);
+			int prevVal = (s.charAt(i) - diff) * MAXBASE;
+			int prevRaw = (vals.get(i) - prevVal) * α;
+		
+		    vals.add(prevRaw + c - diff);
+		}
+
+		return vals;
 	}
 	
-	// Should consolidate this into rollover/strToHashTable
+	// Extracts from a shingle the index of bases
 	private static int mkFirstVal(String shingle, ArrayList<Integer> b) {
 		int result = 0;
 		int diff = 96;
@@ -56,14 +68,14 @@ public class Util {
 
 	// Convert a string into an AL of base values based on an α
 	private static ArrayList<Integer> strToBases(String s) {
-		int a = 31; // As per Piazza
+		int α = 31; // As per Piazza
 		
 		ArrayList<Integer> b = new ArrayList<Integer>(s.length());
 		b.add(1);
 		
 		int i;
 		for(i = 1; i < s.length(); i++)
-			b.add(a * b.get(i - 1));
+			b.add(α * b.get(i - 1));
 		
 		return b;
 	}
