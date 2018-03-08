@@ -20,12 +20,10 @@ public class TestSimilarity
         BruteForceSimilarity bfs = new BruteForceSimilarity(
                 vectorString1, vectorString2, vectorShingleLength);
         
-        /*
         System.out.println("BruteForce Length: ");
         System.out.println(bfs.lengthOfS2());
         System.out.println(vectorAnswer2);
         System.out.println("");
-        */
         
         assert (Util.fuzzyMatch(bfs.lengthOfS1(), vectorAnswer1, 0.11f));
         assert (Util.fuzzyMatch(bfs.lengthOfS2(), vectorAnswer2, 0.11f));
@@ -61,16 +59,6 @@ public class TestSimilarity
     {
         HashCodeSimilarity bfs = new HashCodeSimilarity(
                 vectorString1, vectorString2, vectorShingleLength);
-        System.out.println("HashCode Length1: ");
-        System.out.println(bfs.lengthOfS1());
-        System.out.println(vectorAnswer1);
-        System.out.println("");
-        
-        System.out.println("HashCode Length2: ");
-        System.out.println(bfs.lengthOfS2());
-        System.out.println(vectorAnswer2);
-        System.out.println("");
-        
         assert (bfs.lengthOfS1() == vectorAnswer1);
         assert (bfs.lengthOfS2() == vectorAnswer2);
     }
@@ -80,10 +68,6 @@ public class TestSimilarity
     {
         HashCodeSimilarity bfs = new HashCodeSimilarity(
                 similarityString1, similarityString2, similarityShingleLength);
-        System.out.println("HashCode Similarity: ");
-        System.out.println(bfs.similarity());
-        System.out.println(similarityAnswer);
-        System.out.println("");
         assert (Util.fuzzyMatch(bfs.similarity(), similarityAnswer, 0.1f));
     }
 }

@@ -22,45 +22,17 @@ public class Util {
 	}
 	
 	// Rollover string into shingles ;; maybe merge into strToHashTable
-	private static ArrayList<Integer> rollover(String s, int sLength) {
-		/* DONT DO THIS
-		int len = s.length();
-		int a = 31; // As per Piazza
-		int MAXSHINGLE = len - width + 1; // number of shingles in string
-		int i = 0; // shingle iterator
-		int diff = 96; // shift distance ;; as per Piazza
-		
-		String shingle0 = s.substring(0, width); // first shingle must be calculated for perf.
-		ArrayList<Integer> b = strToBases(s);
-		int highB = b.get(b.size() - 1); // highest base value
-		
-		// push the first raw value
-		ArrayList<Integer> vals = new ArrayList<Integer>(len);
-		vals.add(mkFirstVal(shingle0, b));
-		
-		// Roll over dead
-		for(i = 0; i < MAXSHINGLE - 1; i++) {
-			// maybe make a char?
-			int c = s.charAt(i + width); // current character
-			int prevValue = (s.charAt(i) - diff) * highB; // previous integer value
-			int prevRaw = (vals.get(i) - prevValue) * a;
-			
-			vals.add(prevRaw + c - diff);
-		}
-		
-		return vals;
-		*/
-		
+	private static ArrayList<Integer> rollover(String s, int width) {
 		int alpha = 31;
-		int numShingles = s.length() - sLength + 1;
-        String firstShingle = s.substring(0, sLength);
+		int numShingles = s.length() - width + 1;
+        String firstShingle = s.substring(0, width);
         ArrayList<Integer> shingleValues = new ArrayList<Integer>(numShingles);
         ArrayList<Integer> bases = strToBases(firstShingle);
         int largestBaseValue = bases.get(bases.size() - 1);
         shingleValues.add(Util.mkFirstVal(firstShingle, bases));
         for (int i = 0; i < numShingles - 1; i++)
         {
-            char currentChar = s.charAt(i + sLength);
+            char currentChar = s.charAt(i + width);
             int lastMostSignifigantChar = s.charAt(i) - 96;
             int lastMostSignifigantCharValue = lastMostSignifigantChar * largestBaseValue;
             int lastRepShifted = (shingleValues.get(i) - lastMostSignifigantCharValue) * alpha;
