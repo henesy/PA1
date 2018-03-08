@@ -39,7 +39,7 @@ public class BruteForceSimilarity {
 		for(Tuple t1 : us1)
 			for(Tuple t2 : us2)
 				if(t1.getValue().equals(t2.getValue()))
-					result += t1.getKey() * t2.getKey();
+					result += (t1.getKey() * t2.getKey()); // pow
 		
 		return result / (vl1 * vl2);
 	}
@@ -48,7 +48,7 @@ public class BruteForceSimilarity {
 	private float vectorLength(ArrayList<Tuple> us) {		
 		float result = 0;
 		for(Tuple t : us)
-			result += Math.pow(t.getKey(), 2);
+			result += (t.getKey() * t.getKey()); // pow
 
 		// This truncates, this is bad, but this is in the spec
 		//System.out.println(us + " " + result);

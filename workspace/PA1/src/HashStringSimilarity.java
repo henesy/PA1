@@ -29,12 +29,12 @@ public class HashStringSimilarity {
 		this.t = new HashTable(this.t_list.size()); // Constant time
 		
 		for(Tuple tup : this.s_list) { // Linear time
-			System.out.println(tup.value);
+			//System.out.println(tup.getValue());
 			this.s.add(tup);
 		}
-		System.out.println();
+		//System.out.println();
 		for(Tuple tupl : this.t_list) { // Linear time
-			System.out.println(tupl.value);
+			//System.out.println(tupl.getValue());
 			this.t.add(tupl);
 		}
 		
