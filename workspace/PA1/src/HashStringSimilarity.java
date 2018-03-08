@@ -20,14 +20,21 @@ public class HashStringSimilarity {
 	private float vlt;
 	
 	private static float alpha = 31;
+	private float[] alphas;
 	
 	// Basic constructor
 	public HashStringSimilarity(String s1, String s2, int sLength) {
-		this.s_list = generateList(s1, sLength);
+		this.alphas = new float[sLength];
+		this.alphas[0] = alpha;
+		for(int i = 1; i < alphas.length; i++) {
+			this.alphas[i] = this.alphas[i-1] * alpha;
+		}
+		
+		this.s_list = generateList(s1, sLength, alphas);
 		this.s_short = generateShortList(this.s_list);
 		this.s = new HashTable(s1.length()); // Constant time
 		
-		this.t_list = generateList(s2, sLength);
+		this.t_list = generateList(s2, sLength, alphas);
 		this.t_short = generateShortList(this.t_list);
 		this.t = new HashTable(s2.length()); // Constant time
 		
@@ -46,15 +53,15 @@ public class HashStringSimilarity {
 		
 	}
 	
-	public static ArrayList<Tuple> generateList(String list, int sLength) {
+	public static ArrayList<Tuple> generateList(String list, int sLength, float[] alphas) {
 		ArrayList<Tuple> temporary_list = new ArrayList<>();
 		for (int i = 0; i <= list.length() - sLength; i++) {
 			String temp = list.substring(i, i + sLength);
 			int sum = 0;
 			for (int j = 0; j < sLength; j++) {
-				sum += temp.charAt(j) * Math.pow(alpha, sLength - j - 1);
+				sum += temp.charAt(j) * alphas[sLength - j - 1]; //Math.pow(alpha, sLength - j - 1);
 			}
-			Tuple t = new Tuple(sum, temp);
+			Tuple t = new Tuple(Math.abs(sum), temp);
 			temporary_list.add(t);
 		}
 		return temporary_list;
@@ -89,7 +96,13 @@ public class HashStringSimilarity {
 	public float lengthOfS1() {
 		float running_sum = 0;
 		for(Tuple t : this.s_short) {
-			float sqrme = this.s.search(t);
+			ArrayList<Tuple> list = this.s.search(t.getKey());
+			float sqrme = 0;
+			for(Tuple tup : list) {
+				if(t.equals(tup)) {
+					sqrme++;
+				}
+			}
 			running_sum += (sqrme * sqrme);
 		}
 		return ((float) Math.sqrt(running_sum));
@@ -99,7 +112,13 @@ public class HashStringSimilarity {
 	public float lengthOfS2() {
 		float running_sum = 0;
 		for(Tuple tup : this.t_short) {
-			float sqrme = this.t.search(tup);
+			ArrayList<Tuple> list = this.t.search(tup.getKey());
+			float sqrme = 0;
+			for(Tuple t : list) {
+				if(tup.equals(t)) {
+					sqrme++;
+				}
+			}
 			running_sum += (sqrme * sqrme);
 		}
 		return ((float) Math.sqrt(running_sum));
@@ -109,9 +128,21 @@ public class HashStringSimilarity {
 	public float similarity() {
 		float running_sum = 0;
 		for(Tuple tup : this.u_short) {
-			float l = this.s.search(tup);
-			float r = this.t.search(tup);
-			running_sum += (l * r);
+			ArrayList<Tuple> l = this.s.search(tup.getKey());
+			ArrayList<Tuple> r = this.t.search(tup.getKey());
+			float count_l = 0;
+			float count_r = 0;
+			for(Tuple t : l) {
+				if(tup.equals(t)) {
+					count_l++;
+				}
+			}
+			for(Tuple t : r) {
+				if(tup.equals(t)) {
+					count_r++;
+				}
+			}
+			running_sum += (count_l * count_r);
 		}
 		float sim = running_sum / (this.vls * this.vlt);
 		return sim;

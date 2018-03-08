@@ -17,20 +17,23 @@ public class HashTest {
         long t0, t1;
         float s;
         
+        shak1 = Util.strip(shak1);
+        shak2 = Util.strip(shak2);
+        
         t0 = System.currentTimeMillis();
         HashCodeSimilarity hcs = new HashCodeSimilarity(shak1, shak2, slen);
         s = hcs.similarity();
         t1 = System.currentTimeMillis();
         System.out.printf("HCS %dms is %f\n", (t1-t0), s);
         
-        t0 = System.currentTimeMillis();
         BruteForceSimilarity bfs = new BruteForceSimilarity(shak1, shak2, slen);
+        t0 = System.currentTimeMillis();
         s = bfs.similarity();
         t1 = System.currentTimeMillis();
         System.out.printf("BFS %dms is %f\n", (t1-t0), s);
         
-        t0 = System.currentTimeMillis();
         HashStringSimilarity hss = new HashStringSimilarity(shak1, shak2, slen);
+        t0 = System.currentTimeMillis();
         s = hss.similarity();
         t1 = System.currentTimeMillis();
         System.out.printf("HSS %dms is %f\n", (t1-t0), s);
