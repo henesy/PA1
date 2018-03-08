@@ -2,10 +2,10 @@ import org.junit.Test;
 
 public class TestSimilarity
 {
-    public static String vectorString1 = "ABFHBFDFAB";
-    public static String vectorString2 = "BEAAHHDCH";
-    public static String similarityString1 = "A rose is a rose is a rose.";
-    public static String similarityString2 = "A rose is a flower, which is a rose.";
+    public static String vectorString1 = "abfhbfdfab";
+    public static String vectorString2 = "beaahhdch";
+    public static String similarityString1 = "aroseisaroseisarose";
+    public static String similarityString2 = "aroseisaflowerwhichisarose";
 
     public static int vectorShingleLength = 1;
     public static int similarityShingleLength = 4;
