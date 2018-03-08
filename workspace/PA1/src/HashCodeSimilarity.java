@@ -5,40 +5,58 @@
  */
 
 public class HashCodeSimilarity {
-	private String s1;
-	private String s2;
+	private HashTable ht1;
+	private HashTable ht2;
+	private float vl1;
+	private float vl2;
 	private int len; 
 	
 	// Basic constructor
 	public HashCodeSimilarity(String s1, String s2, int sLength) {
 		//TODO -- verify no more calculation is required (page 6/8)
 		len = sLength;
-		this.s1 = s1;
-		this.s2 = s2;
+		ht1 = Util.strToHashTable(s1, len);
+		ht2 = Util.strToHashTable(s2, len);
+		vl1 = vectorLength(ht1);
+		vl2 = vectorLength(ht2);
 	}
 	
 	// Returns the VectorLength of S
 	public float lengthOfS1() {
 		//TODO -- page 6/8
-		return 0;
+		return vl1;
 	}
 	
 	// Returns the VectorLength of T
 	public float lengthOfS2() {
 		//TODO -- page 6/8
-		return 0;
+		return vl2;
 	}
 	
-	// Returns Similarity(S, T);
+	// Returns Similarity(S, T)
 	public float similarity() {
-		//TODO -- page 6/8
-		return 0;
+		int result = 0;
+		
+		for(MultiSet ms : ht1.getSets())
+			if(ms == null)
+				continue;
+			else
+				result += ms.getElements().size() * ht2.search(ms.getElements().get(0));
+		
+		return result / (vl1 * vl2);
 	}
 	
 	// Calculate vector length for string
-	private float vectorLength() {
-		//TODO
-		return 0;
+	private float vectorLength(HashTable ht) {
+		int result = 0;
+		
+		for(MultiSet ms : ht.getSets())
+			if(ms == null)
+				continue;
+			else
+				result += Math.pow(ms.getElements().size(), 2);
+		
+		return (float) Math.sqrt(result);
 	}
 
 }

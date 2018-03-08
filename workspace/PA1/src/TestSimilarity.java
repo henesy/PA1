@@ -62,6 +62,8 @@ public class TestSimilarity
     {
         HashCodeSimilarity bfs = new HashCodeSimilarity(
                 similarityString1, similarityString2, similarityShingleLength);
+        System.out.println(bfs.similarity());
+        System.out.println(similarityAnswer);
         assert (Util.fuzzyMatch(bfs.similarity(), similarityAnswer, 0.1f));
     }
 }

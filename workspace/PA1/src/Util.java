@@ -7,6 +7,76 @@ import java.util.ArrayList;
 
 /* Utility functions for PA1 */
 public class Util {
+	// Convert a string into HashTable using strToShingles ;; HT is the most performant DS allowed
+	public static HashTable strToHashTable(String s, int width) {
+		// Stripping is necessary for college if not for the spec
+		HashTable ht = rollover(strToShingles(s, width), strip(s), width);
+		
+		return ht;
+	}
+	
+	// Rollover string into shingles ;; maybe merge into strToHashTable
+	private static HashTable rollover(ArrayList<String> shingles, String s, int width) {
+		int len = s.length();
+		HashTable ht = new HashTable(len);
+		int α = 31; // As per Piazza
+		int MAXSHINGLE = len - width + 1; // number of shingles in string
+		int hti = 0; // ht iterator
+		int i = 0; // shingle iterator
+		int diff = 96; // shift distance ;; as per Piazza
+		
+		String shingle0 = s.substring(0, width); // first shingle must be calculated for perf.
+		ArrayList<Integer> b = strToBases(s);
+		int highB = b.get(b.size() - 1); // highest base value
+		
+		// push the first raw value
+		ArrayList<Integer> vals = new ArrayList<Integer>(len);
+		vals.add(mkFirstVal(shingle0, b));
+		
+		// Roll over dead
+		for(i = 0; i < MAXSHINGLE - 1; i++) {
+			// maybe make a char?
+			int c = s.charAt(i + width); // current character
+			int prevValue = (s.charAt(i) - diff) * highB; // previous integer value
+			int prevRaw = (vals.get(i) - prevValue) * α;
+			
+			vals.add(prevRaw + c - diff);
+		}
+		
+		// Add to HashTable
+		for(i = 0; i < shingles.size(); i++)
+			ht.add(new Tuple(vals.get(i), shingles.get(i)));
+		
+		return ht;
+	}
+	
+	// Should consolidate this into rollover/strToHashTable
+	private static int mkFirstVal(String shingle, ArrayList<Integer> b) {
+		int result = 0;
+		int diff = 96;
+		
+		byte[] raw = shingle.getBytes();
+		int i;
+		for(i = 0; i < shingle.length(); i++)
+			result += (raw[i] - diff) * b.get(shingle.length() - i - 1);
+		
+		return result;
+	}
+
+	// Convert a string into an AL of base values based on an α
+	private static ArrayList<Integer> strToBases(String s) {
+		int α = 31; // As per Piazza
+		
+		ArrayList<Integer> b = new ArrayList<Integer>(s.length());
+		b.add(1);
+		
+		int i;
+		for(i = 1; i < s.length(); i++)
+			b.add(α * b.get(i - 1));
+		
+		return b;
+	}
+	
 	// Strip strings (just in case)
 	public static String strip(String s) {
 		return s.replaceAll("[^A-Za-z0-9]+", "").toLowerCase();

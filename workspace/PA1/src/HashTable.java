@@ -126,5 +126,10 @@ public class HashTable {
 	        for(Tuple t : toAdd)
 	            add(t);
 	    }
+
+		// To make vectorLength easier
+		public MultiSet[] getSets() {
+			return sets;
+		}
 }
 
