@@ -13,7 +13,6 @@ public class HashCodeSimilarity {
 	
 	// Basic constructor
 	public HashCodeSimilarity(String s1, String s2, int sLength) {
-		//TODO -- verify no more calculation is required (page 6/8)
 		len = sLength;
 		ht1 = Util.strToHashTable(s1, len);
 		ht2 = Util.strToHashTable(s2, len);
@@ -23,13 +22,11 @@ public class HashCodeSimilarity {
 	
 	// Returns the VectorLength of S
 	public float lengthOfS1() {
-		//TODO -- page 6/8
 		return vl1;
 	}
 	
 	// Returns the VectorLength of T
 	public float lengthOfS2() {
-		//TODO -- page 6/8
 		return vl2;
 	}
 	
@@ -58,5 +55,5 @@ public class HashCodeSimilarity {
 		
 		return (float) Math.sqrt(result);
 	}
-
 }
+

@@ -51,6 +51,7 @@ public class BruteForceSimilarity {
 			result += Math.pow(t.getKey(), 2);
 
 		// This truncates, this is bad, but this is in the spec
+		//System.out.println(us + " " + result);
 		return (float) Math.sqrt(result);
 	}
 	
