@@ -22,19 +22,17 @@ public class HashStringSimilarity {
 	public HashStringSimilarity(String s1, String s2, int sLength) {
 		this.s_list = generateList(s1, sLength);
 		this.s_short = generateShortList(this.s_list);
-		this.s = new HashTable(this.s_list.size()); // Constant time
+		this.s = new HashTable(s1.length()); // Constant time
 		
 		this.t_list = generateList(s2, sLength);
 		this.t_short = generateShortList(this.t_list);
-		this.t = new HashTable(this.t_list.size()); // Constant time
+		this.t = new HashTable(s2.length()); // Constant time
 		
 		for(Tuple tup : this.s_list) { // Linear time
-			System.out.println(tup.value);
 			this.s.add(tup);
 		}
-		System.out.println();
+		
 		for(Tuple tupl : this.t_list) { // Linear time
-			System.out.println(tupl.value);
 			this.t.add(tupl);
 		}
 		

@@ -90,13 +90,28 @@ public class HashTable {
 		// Required -- Returns an array list of Tuples whose key == k
 		public ArrayList<Tuple> search(int k) {
 			MultiSet s = sets[hashfunc.hash(k)];
+			ArrayList<Tuple> ret = new ArrayList<>();
 			if(s == null)
 				return new ArrayList<Tuple>();
-			return s.getElements();
+			for(Tuple tpl : s.getElements()) {
+				if(tpl.getKey() == k) {
+					ret.add(tpl);
+				}
+			}
+			return ret;
 		}
 
 		// Required -- Returns the number of times t is in the hash table
 		public int search(Tuple t) {
+//			int count = 0;
+//			for(MultiSet ms : this.sets) {
+//				for(Tuple tuple : ms.getElements()) {
+//					if(tuple.equals(t)) {
+//						count++;
+//					}
+//				}
+//			}
+//			return count;
 			return search(t.getKey()).size();
 		}
 		
