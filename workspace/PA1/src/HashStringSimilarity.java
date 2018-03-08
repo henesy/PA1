@@ -16,6 +16,9 @@ public class HashStringSimilarity {
 	private ArrayList<Tuple> t_short; //non multiset of all shingles in s2
 	private ArrayList<Tuple> u_short; //union non multiset of all shingles in s1 and s2
 	
+	private float vls;
+	private float vlt;
+	
 	private static float alpha = 31;
 	
 	// Basic constructor
@@ -37,6 +40,9 @@ public class HashStringSimilarity {
 		}
 		
 		this.u_short = generateUnion(this.s_short, this.t_short);
+		
+		this.vls = lengthOfS1();
+		this.vlt = lengthOfS2();
 		
 	}
 	
@@ -83,7 +89,8 @@ public class HashStringSimilarity {
 	public float lengthOfS1() {
 		float running_sum = 0;
 		for(Tuple t : this.s_short) {
-			running_sum += Math.pow(this.s.search(t), 2);
+			float sqrme = this.s.search(t);
+			running_sum += (sqrme * sqrme);
 		}
 		return ((float) Math.sqrt(running_sum));
 	}
@@ -92,7 +99,8 @@ public class HashStringSimilarity {
 	public float lengthOfS2() {
 		float running_sum = 0;
 		for(Tuple tup : this.t_short) {
-			running_sum += Math.pow(this.t.search(tup), 2);
+			float sqrme = this.t.search(tup);
+			running_sum += (sqrme * sqrme);
 		}
 		return ((float) Math.sqrt(running_sum));
 	}
@@ -105,7 +113,7 @@ public class HashStringSimilarity {
 			float r = this.t.search(tup);
 			running_sum += (l * r);
 		}
-		float sim = running_sum / (this.lengthOfS1() * this.lengthOfS2());
+		float sim = running_sum / (this.vls * this.vlt);
 		return sim;
 	}
 

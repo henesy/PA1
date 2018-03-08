@@ -7,72 +7,123 @@ import java.util.ArrayList;
 
 public class BruteForceSimilarity {
 	// REMINDER -- ONLY allowed Array and ArrayList -- NO SORTING
-	private float vl1;
-	private float vl2;
-	private ArrayList<Tuple> us1;
-	private ArrayList<Tuple> us2;
-	private int len;
+	
+	private ArrayList<Tuple> s_list; //multiset of all shingles in s1
+	private ArrayList<Tuple> t_list; //multiset of all shingles in s2
+	
+	private ArrayList<Tuple> s_short; //non multiset of all shingles in s1
+	private ArrayList<Tuple> t_short; //non multiset of all shingles in s2
+	private ArrayList<Tuple> u_short; //union non multiset of all shingles in s1 and s2
+	
+	private float vls;
+	private float vlt;
+	
+	private static float alpha = 31;
 	
 	// Basic constructor
 	public BruteForceSimilarity(String s1, String s2, int sLength) {
-		len = sLength;
-		us1 = uniqShingles(Util.strToShingles(s1, len));
-		us2 = uniqShingles(Util.strToShingles(s2, len));
-		vl1 = vectorLength(us1);
-		vl2 = vectorLength(us2);
+		this.s_list = generateList(s1, sLength);
+		this.s_short = generateShortList(this.s_list);
+		
+		this.t_list = generateList(s2, sLength);
+		this.t_short = generateShortList(this.t_list);
+		
+		this.u_short = generateUnion(this.s_short, this.t_short);
+		
+		this.vls = lengthOfS1();
+		this.vlt = lengthOfS2();
+		
+	}
+	
+	public static ArrayList<Tuple> generateList(String list, int sLength) {
+		ArrayList<Tuple> temporary_list = new ArrayList<>();
+		for (int i = 0; i <= list.length() - sLength; i++) {
+			String temp = list.substring(i, i + sLength);
+			int sum = 0;
+			for (int j = 0; j < sLength; j++) {
+				sum += temp.charAt(j) * Math.pow(alpha, sLength - j - 1);
+			}
+			Tuple t = new Tuple(sum, temp);
+			temporary_list.add(t);
+		}
+		return temporary_list;
+	}
+	
+	public static ArrayList<Tuple> generateShortList(ArrayList<Tuple> list) {
+		ArrayList<Tuple> ret = new ArrayList<>();
+		for(Tuple t : list) {
+			if(!ret.contains(t)) {
+				ret.add(t);
+			}
+		}
+		return ret;
+	}
+	
+	public static ArrayList<Tuple> generateUnion(ArrayList<Tuple> s_short, ArrayList<Tuple> t_short) {
+		ArrayList<Tuple> u_short = new ArrayList<>();
+		for(Tuple tupl : s_short) {
+			if(!u_short.contains(tupl)) {
+				u_short.add(tupl);
+			}
+		}
+		for(Tuple tup : t_short) {
+			if(!u_short.contains(tup)) {
+				u_short.add(tup);
+			}
+		}
+		return u_short;
 	}
 	
 	// Returns the VectorLength of S
 	public float lengthOfS1() {
-		return vl1;
+		float running_sum = 0;
+		for(Tuple tuple : this.s_short) {
+			float count = 0;
+			for(Tuple tupl : this.s_list) {
+				if(tuple.equals(tupl)) {
+					count++;
+				}
+			}
+			running_sum += count * count;
+		}
+		return ((float) Math.sqrt(running_sum));
 	}
 
 	// Returns the VectorLength of T
 	public float lengthOfS2() {
-		return vl2;
+		float running_sum = 0;
+		for(Tuple tuple : this.t_short) {
+			float count = 0;
+			for(Tuple tupl : this.t_list) {
+				if(tuple.equals(tupl)) {
+					count++;
+				}
+			}
+			running_sum += count * count;
+		}
+		return ((float) Math.sqrt(running_sum));
 	}
 	
 	// Returns Similarity(S, T)
 	public float similarity() {
-		float result = 0;
-		
-		for(Tuple t1 : us1)
-			for(Tuple t2 : us2)
-				if(t1.getValue().equals(t2.getValue()))
-					result += t1.getKey() * t2.getKey();
-		
-		return result / (vl1 * vl2);
-	}
-
-	// Calculate vector length for string ;; us → UniqueShingles
-	private float vectorLength(ArrayList<Tuple> us) {		
-		float result = 0;
-		for(Tuple t : us)
-			result += Math.pow(t.getKey(), 2);
-
-		// This truncates, this is bad, but this is in the spec
-		//System.out.println(us + " " + result);
-		return (float) Math.sqrt(result);
-	}
-	
-	// Uniq the shingles and add a count element (useful in maths)	 ;; Value → shingle, Key → count ;; O(n^2)
-	private static ArrayList<Tuple> uniqShingles(ArrayList<String> shingles) {
-		ArrayList<Tuple> uniqs = new ArrayList<Tuple>();
-		
-		boolean add = true;
-		for(String s : shingles) {
-			for(Tuple t : uniqs)
-				if(t.getValue().equals(s)) {
-					// We have found an existing shingle entry already in uniqs ;; increment and don't add
-					t.setKey(t.getKey() + 1);
-					add = false;
-					break;
+		float running_sum = 0;
+		for(Tuple tuple : this.u_short) {
+			float s_count = 0;
+			float t_count = 0;
+			for(Tuple s : this.s_list) {
+				if(tuple.equals(s)) {
+					s_count++;
 				}
-			if(add)
-				uniqs.add(new Tuple(1, s));
+			}
+			for(Tuple t : this.t_list) {
+				if(tuple.equals(t)) {
+					t_count++;
+				}
+			}
+			running_sum += s_count * t_count;
 		}
-		
-		return uniqs;
+		float sim = running_sum / (this.vls * this.vlt);
+		return sim;
 	}
 }
 
