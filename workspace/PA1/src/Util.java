@@ -27,7 +27,7 @@ public class Util {
 	// Rollover string into shingles ;; maybe merge into strToHashTable
 	private static ArrayList<Integer> rollover(String s, int width) {
 		int len = s.length();
-		int α = 31;
+		int a = 31;
 		int diff = 96;
 		int MAXSHINGLES = len - width + 1; // maximum number of shingles
 		
@@ -45,7 +45,7 @@ public class Util {
 		for (i = 0; i < MAXSHINGLES - 1; i++) {
 			char c = s.charAt(i + width);
 			int prevVal = (s.charAt(i) - diff) * MAXBASE;
-			int prevRaw = (vals.get(i) - prevVal) * α;
+			int prevRaw = (vals.get(i) - prevVal) * a;
 		
 		    vals.add(prevRaw + c - diff);
 		}
@@ -68,14 +68,14 @@ public class Util {
 
 	// Convert a string into an AL of base values based on an α
 	private static ArrayList<Integer> strToBases(String s) {
-		int α = 31; // As per Piazza
+		int a = 31; // As per Piazza
 		
 		ArrayList<Integer> b = new ArrayList<Integer>(s.length());
 		b.add(1);
 		
 		int i;
 		for(i = 1; i < s.length(); i++)
-			b.add(α * b.get(i - 1));
+			b.add(a * b.get(i - 1));
 		
 		return b;
 	}
