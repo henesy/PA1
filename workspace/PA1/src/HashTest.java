@@ -22,7 +22,7 @@ public class HashTest {
 		String shak2 = new String(Files.readAllBytes(Paths.get("shak2")));
 		
 		// tests
-		int slen = 5;
+		int slen = 8;
 		long t0, t1;
 		float s;
 		

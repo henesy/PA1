@@ -39,16 +39,22 @@ public class BruteForceSimilarity {
 		for(Tuple t1 : us1)
 			for(Tuple t2 : us2)
 				if(t1.getValue().equals(t2.getValue()))
-					result += (t1.getKey() * t2.getKey()); // pow
+					result += (t1.getKey() * t2.getKey());
 		
+		System.out.println("SIMILARITY: " + result);
 		return result / (vl1 * vl2);
+	}
+	
+	// pow but safer?
+	private int pow(int a) {
+		return (a * a);
 	}
 
 	// Calculate vector length for string ;; us → UniqueShingles
 	private float vectorLength(ArrayList<Tuple> us) {		
 		float result = 0;
 		for(Tuple t : us)
-			result += (t.getKey() * t.getKey()); // pow
+			result += pow(t.getKey()); // pow
 
 		// This truncates, this is bad, but this is in the spec
 		//System.out.println(us + " " + result);
@@ -59,16 +65,19 @@ public class BruteForceSimilarity {
 	private static ArrayList<Tuple> uniqShingles(ArrayList<String> shingles) {
 		ArrayList<Tuple> uniqs = new ArrayList<Tuple>();
 		
-		boolean add = true;
+		boolean add = false;
 		for(String s : shingles) {
-			for(Tuple t : uniqs)
+			int i;
+			for(i = 0; i < uniqs.size(); i++) {
+				Tuple t = uniqs.get(i);
 				if(t.getValue().equals(s)) {
 					// We have found an existing shingle entry already in uniqs ;; increment and don't add
 					t.setKey(t.getKey() + 1);
-					add = false;
+					add = true;
 					break;
 				}
-			if(add)
+			}
+			if(!add)
 				uniqs.add(new Tuple(1, s));
 		}
 		
