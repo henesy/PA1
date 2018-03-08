@@ -33,7 +33,7 @@ public class HashCodeSimilarity {
 		return vl2;
 	}
 	
-	// Returns Similarity(S, T)
+	// Returns Similarity(S, T);
 	public float similarity() {
 		int result = 0;
 		

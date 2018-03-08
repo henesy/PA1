@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * @author Sean Hinchee seh@iastate.edu
@@ -10,18 +11,22 @@ public class Util {
 	// Convert a string into HashTable using strToShingles ;; HT is the most performant DS allowed
 	public static HashTable strToHashTable(String s, int width) {
 		// Stripping is necessary for college if not for the spec
-		HashTable ht = rollover(strToShingles(s, width), strip(s), width);
+		HashTable ht = new HashTable(s.length());
+		ArrayList<String> shingles = strToShingles(s, width);
+		Iterator<Integer> vals = rollover(strip(s), width).iterator();
+		
+		for(String shingle : shingles)
+			ht.add(new Tuple(vals.next(), shingle));
 		
 		return ht;
 	}
 	
 	// Rollover string into shingles ;; maybe merge into strToHashTable
-	private static HashTable rollover(ArrayList<String> shingles, String s, int width) {
+	private static ArrayList<Integer> rollover(String s, int sLength) {
+		/* DONT DO THIS
 		int len = s.length();
-		HashTable ht = new HashTable(len);
-		int α = 31; // As per Piazza
+		int a = 31; // As per Piazza
 		int MAXSHINGLE = len - width + 1; // number of shingles in string
-		int hti = 0; // ht iterator
 		int i = 0; // shingle iterator
 		int diff = 96; // shift distance ;; as per Piazza
 		
@@ -38,16 +43,30 @@ public class Util {
 			// maybe make a char?
 			int c = s.charAt(i + width); // current character
 			int prevValue = (s.charAt(i) - diff) * highB; // previous integer value
-			int prevRaw = (vals.get(i) - prevValue) * α;
+			int prevRaw = (vals.get(i) - prevValue) * a;
 			
 			vals.add(prevRaw + c - diff);
 		}
 		
-		// Add to HashTable
-		for(i = 0; i < shingles.size(); i++)
-			ht.add(new Tuple(vals.get(i), shingles.get(i)));
+		return vals;
+		*/
 		
-		return ht;
+		int alpha = 31;
+		int numShingles = s.length() - sLength + 1;
+        String firstShingle = s.substring(0, sLength);
+        ArrayList<Integer> shingleValues = new ArrayList<Integer>(numShingles);
+        ArrayList<Integer> bases = strToBases(firstShingle);
+        int largestBaseValue = bases.get(bases.size() - 1);
+        shingleValues.add(Util.mkFirstVal(firstShingle, bases));
+        for (int i = 0; i < numShingles - 1; i++)
+        {
+            char currentChar = s.charAt(i + sLength);
+            int lastMostSignifigantChar = s.charAt(i) - 96;
+            int lastMostSignifigantCharValue = lastMostSignifigantChar * largestBaseValue;
+            int lastRepShifted = (shingleValues.get(i) - lastMostSignifigantCharValue) * alpha;
+            shingleValues.add(lastRepShifted + currentChar - 96);
+        }
+        return shingleValues;
 	}
 	
 	// Should consolidate this into rollover/strToHashTable
@@ -60,19 +79,19 @@ public class Util {
 		for(i = 0; i < shingle.length(); i++)
 			result += (raw[i] - diff) * b.get(shingle.length() - i - 1);
 		
-		return result;
+		return Math.abs(result);
 	}
 
 	// Convert a string into an AL of base values based on an α
 	private static ArrayList<Integer> strToBases(String s) {
-		int α = 31; // As per Piazza
+		int a = 31; // As per Piazza
 		
 		ArrayList<Integer> b = new ArrayList<Integer>(s.length());
 		b.add(1);
 		
 		int i;
 		for(i = 1; i < s.length(); i++)
-			b.add(α * b.get(i - 1));
+			b.add(a * b.get(i - 1));
 		
 		return b;
 	}
