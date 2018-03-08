@@ -226,7 +226,7 @@ public class TestHashTable
         }
         for (Tuple t : tuples)
         {
-            assert (ht.search(t.key).contains(t));
+            assert (ht.search(t.getKey()).contains(t));
         }
     }
 

@@ -20,7 +20,7 @@ public class HashTable {
 	
 		// Required -- Initialize hash table
 		public HashTable(int size) {
-			int prime = getNextPrime(size);
+			int prime = Util.getNextPrime(size);
 			sets = new MultiSet[prime];
 			hashfunc = new HashFunction(prime);
 			loads = new PriorityQueue<Load>(Collections.reverseOrder());
@@ -57,7 +57,7 @@ public class HashTable {
 		
 		// Required -- Adds t to the hash table (see page 2/8)
 		public HashTable add(Tuple t) {
-			int h = hashfunc.hash(t.key);
+			int h = hashfunc.hash(t.getKey());
 			MultiSet ms = sets[h];
 			if(ms == null)
 				sets[h] = new MultiSet();
@@ -97,12 +97,12 @@ public class HashTable {
 
 		// Required -- Returns the number of times t is in the hash table
 		public int search(Tuple t) {
-			return search(t.key).size();
+			return search(t.getKey()).size();
 		}
 		
 		// Required -- Removes one occurrence t from the hash table
 		public void remove(Tuple t) {
-			MultiSet ms = sets[hashfunc.hash(t.key)];
+			MultiSet ms = sets[hashfunc.hash(t.getKey())];
 			if(ms == null)
 				return;
 			ms.getElements().remove(t);
@@ -112,44 +112,24 @@ public class HashTable {
 					lsize--;
 			}
 		}
-
-		// Tests if an integer is prime
-		private static boolean isPrime(int n) {
-			for(int i= 2; i<=Math.sqrt(n); i++)
-				if (n%i==0)
-					return false;
-			return true;
-		}	
 		
 		// Resizes the table (see PDF)
 		private void resize() {
 	        LinkedList<Tuple> toAdd = new LinkedList<Tuple>();
 	        for(MultiSet e : sets)
-	            if (e != null)
-	                for (Tuple t : e.getElements())
+	            if(e != null)
+	                for(Tuple t : e.getElements())
 	                    toAdd.add(t);
-	        sets = new MultiSet[getNextPrime(size() * 2)];
+	        sets = new MultiSet[Util.getNextPrime(size() * 2)];
 	        size = 0;
 	        lsize = 0;
 	        for(Tuple t : toAdd)
 	            add(t);
 	    }
-		
-		// Generates the next largest prime given a limit
-		private static int getNextPrime(int given_limit) {
-			int limit = 0;
-			// Bertrand's Postulate states that when given_limit > 3 next prime exists within
-			// given_limit < p < (given_limit * 2) - 2 (which is == limit).
-			if (given_limit > 3)
-				limit = (given_limit * 2) - 2;
-			else if (given_limit == 2 || given_limit == 3)
-				return (int) Math.ceil(given_limit / 2) + given_limit;
 
-			for (int i = given_limit; i <= limit; i++)
-				if (isPrime(i))
-					return i;
-
-			return 3;
+		// To make vectorLength easier
+		public MultiSet[] getSets() {
+			return sets;
 		}
 }
 

@@ -5,6 +5,7 @@
 
 public class Load implements Comparable<Load> {
 	private int val;
+	// Eclipse claims this is not used ;; eclipse is silly
 	private MultiSet ms;
 	
 	public Load(MultiSet m) {
