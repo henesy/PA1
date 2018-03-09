@@ -50,8 +50,10 @@ public class HashCodeSimilarity {
 		for(MultiSet ms : ht.getSets())
 			if(ms == null)
 				continue;
-			else
-				result += Math.pow(ms.getElements().size(), 2);
+			else {
+				float val = ms.getElements().size();
+				result += (val * val);
+			}
 		
 		return (float) Math.sqrt(result);
 	}
